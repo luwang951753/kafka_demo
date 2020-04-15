@@ -26,7 +26,7 @@ public class SyncProducer {
 
         props.put(ProducerConfig.ACKS_CONFIG,"all");
         props.put(ProducerConfig.BATCH_SIZE_CONFIG,16384);
-        props.put(ProducerConfig.LINGER_MS_CONFIG,1000);
+        props.put(ProducerConfig.LINGER_MS_CONFIG,10);
 
 
         //1.创建1个生产者对象
@@ -34,6 +34,7 @@ public class SyncProducer {
 
         //2.调用send方法
         for (int i = 0; i < 1000 ; i++) {
+            System.out.println(i);
             RecordMetadata meta = producer.send(new ProducerRecord<String, String>("first", i + "", "message-" + i)).get();
             System.out.println("meta="+meta.offset());
         }

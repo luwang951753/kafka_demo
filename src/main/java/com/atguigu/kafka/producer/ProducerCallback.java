@@ -31,11 +31,12 @@ public class ProducerCallback {
         for (int i = 0; i < 1000 ; i++) {
             producer.send(new ProducerRecord<String, String>("first", i + "", "message-" + i), new Callback() {
                 public void onCompletion(RecordMetadata recordMetadata, Exception e) {
-                    if(e == null){
-                        System.out.println("success");
-                    }else{
-                        e.printStackTrace();
-                    }
+                if(e == null){
+                    System.out.println("success");
+                }else{
+                    System.out.println("error");
+                    e.printStackTrace();
+                }
                 }
             });
         }
