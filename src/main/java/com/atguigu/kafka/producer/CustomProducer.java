@@ -39,7 +39,7 @@ public class CustomProducer {
         KafkaProducer<String, String> producer = new KafkaProducer<String, String>(props);
 
         //2.调用send方法
-        for (int i = 0; i < 10000 ; i++) {
+        for (int i = 0; i < 100 ; i++) {
             System.out.println(i);
             producer.send(new ProducerRecord<String, String>("first",1,i+"","中华人民共和国-"+i));
         }
