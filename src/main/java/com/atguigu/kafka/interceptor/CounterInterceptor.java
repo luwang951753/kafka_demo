@@ -17,6 +17,7 @@ public class CounterInterceptor implements ProducerInterceptor<String,String> {
     private long errorNum = 0L;
 
     public ProducerRecord<String, String> onSend(ProducerRecord<String, String> record) {
+
         return record;
     }
 
@@ -29,7 +30,7 @@ public class CounterInterceptor implements ProducerInterceptor<String,String> {
     }
 
     public void close() {
-
+        System.out.println("拦截器");
         System.out.println("successNum="+successNum);
         System.out.println("errorNum="+errorNum);
     }

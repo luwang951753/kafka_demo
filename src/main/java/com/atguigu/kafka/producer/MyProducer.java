@@ -19,9 +19,18 @@ import java.util.Properties;
  * 3. ProducerConfigr类提供很多静态属性，可以通过调用这个类的静态属性为producer设置参数也是可以的
  *
  * 4. 默认使用DefaultPartitioner作为分区组件
+ *
+ * 5.拦截器的获取
+ *      this.interceptors = interceptorList.isEmpty() ? null : new ProducerInterceptors<>(interceptorList);
+ *     需要配置ProducerConfig.INTERCEPTOR_CLASSES_CONFIG=List<String>
+ *     自定义的拦截器必须是ProducerIntegerCeptor类型
  */
 public class MyProducer {
     public static void main(String[] args) {
+
+        ArrayList<String> interceptors = new ArrayList<String>();
+        interceptors.add("com.atguigu.kafka.interceptor.TimeInterceptor");
+        interceptors.add("com.atguigu.kafka.interceptor.CounterInterceptor");
 
         Properties props = new Properties();
 
@@ -31,17 +40,18 @@ public class MyProducer {
         props.put("batch.size", 16384);
         props.put("linger.ms", 1);
         props.put("buffer.memory", 33554432);
-        props.put("key.serializer", "org.apache.kafka.common.serialization.IntegerSerializer");
+        props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
 
         //设置自定义分区组件
-        props.put("ProducerConfig.PARTITIONER_CLASS_CONFIG", "com.atguigu.kafka.producer.MyPartitioner" );
+        props.put("partitioner.class", "com.atguigu.kafka.producer.MyPartitioner" );
+        props.put("interceptor.classes",interceptors);
 
 
-        KafkaProducer<Integer, String> producer = new KafkaProducer<Integer, String>(props);
+        KafkaProducer<String, String> producer = new KafkaProducer<String, String>(props);
 
-        for (int i = 0; i < 100; i++){
-            ProducerRecord<Integer, String> record = new ProducerRecord<Integer, String>("first",null,i,"atguigu"+i);
+        for (int i = 0; i < 10; i++){
+            ProducerRecord<String, String> record = new ProducerRecord<String, String>("first",null,"aa"+i,"atguigu"+i);
             //在发送时，会先调用拦截器
             producer.send(record, new Callback() {
                 public void onCompletion(RecordMetadata metadata, Exception exception) {

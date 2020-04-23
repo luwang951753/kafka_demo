@@ -13,7 +13,7 @@ public class MyPartitioner implements Partitioner {
     public int partition(String topic, Object key, byte[] keyBytes, Object value, byte[] valueBytes, Cluster cluster) {
         List<PartitionInfo> partitions = cluster.partitionsForTopic(topic);
         int numPartitions = partitions.size();
-
+        System.out.println("计算自定义分区");
         return (key.hashCode() & Integer.MAX_VALUE) % numPartitions;
     }
 
@@ -25,6 +25,7 @@ public class MyPartitioner implements Partitioner {
     public void configure(Map<String, ?> configs) {
         //从当前Producer的配置中读取相关属性
         Object object = configs.get("batch.size");
-        System.out.println(object);
+
+        System.out.println("自定义分区读取配置信息:"+object);
     }
 }

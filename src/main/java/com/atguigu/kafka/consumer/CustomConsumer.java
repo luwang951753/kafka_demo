@@ -35,9 +35,10 @@ public class CustomConsumer {
 
         //2.调用poll
         while(true){
+
             ConsumerRecords<String, String> records = consumer.poll(100);
             for (ConsumerRecord<String, String> record : records) {
-                System.out.println("topic="+record.topic()+" record ="+record.offset()+" value="+record.value());
+                System.out.println("topic="+record.topic()+"partition="+record.partition()+" record ="+record.offset()+" value="+record.value());
             }
 
             consumer.commitAsync();
